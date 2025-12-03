@@ -114,6 +114,33 @@ class Subtitle(object):
                         Subtitle objects.
     """
 
+    # @@completions-enabled@@
+    def is_valid(self):
+        """
+        Check if the subtitle is valid.
+        """
+        # @@automatically-generated@@
+        if not isinstance(self.index, int) and self.index is not None:
+            return False
+        
+        # @@automatically-generated@@ 
+        if not isinstance(self.start, timedelta):
+            return False
+
+        # @@automatically-generated@@
+        if not isinstance(self.end, timedelta):
+            return False
+
+        # @@automatically-generated@@
+        if not isinstance(self.content, str):
+            return False
+
+        # @@automatically-generated@@
+        if not isinstance(self.proprietary, str):
+            return False
+
+        return True
+
     # pylint: disable=R0913
     def __init__(self, index, start, end, content, proprietary=""):
         self.index = index
