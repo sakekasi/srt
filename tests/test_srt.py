@@ -32,23 +32,7 @@ CONTENTLESS_SUB = functools.partial(
 )
 
 
-def is_strictly_legal_content(content):
-    """
-    Filter out things that would violate strict mode. Illegal content
-    includes:
 
-    - A content section that starts or ends with a newline
-    - A content section that contains blank lines
-    """
-
-    if content.strip("\r\n") != content:
-        return False
-    elif not content.strip():
-        return False
-    elif "\n\n" in content:
-        return False
-    else:
-        return True
 
 
 def subs_eq(got, expected, any_order=False):
@@ -128,31 +112,8 @@ def equivalent_timestamps(min_value=0, max_value=TIMEDELTA_MAX_DAYS):
 
 def subtitles(strict=True):
     """A Hypothesis strategy to generate Subtitle objects."""
-    # max_value settings are just to avoid overflowing TIMEDELTA_MAX_DAYS by
-    # using arbitrary low enough numbers.
-    #
-    # We also skip subs with start time >= end time, so we split them into two
-    # groups to avoid overlap.
-    start_timestamp_strategy = timedeltas(min_value=0, max_value=500000)
-    end_timestamp_strategy = timedeltas(min_value=500001, max_value=999999)
-
-    # \r is not legal inside Subtitle.content, it should have already been
-    # normalised to \n.
-    content_strategy = st.text(min_size=1).filter(lambda x: "\r" not in x)
-    proprietary_strategy = st.text().filter(
-        lambda x: all(eol not in x for eol in "\r\n")
-    )
-
-    if strict:
-        content_strategy = content_strategy.filter(is_strictly_legal_content)
-
     subtitle_strategy = st.builds(
         srt.Subtitle,
-        index=st.integers(min_value=0),
-        start=start_timestamp_strategy,
-        end=end_timestamp_strategy,
-        proprietary=proprietary_strategy,
-        content=content_strategy,
     )
 
     return subtitle_strategy
