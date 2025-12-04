@@ -32,7 +32,8 @@ CONTENTLESS_SUB = functools.partial(
 )
 
 
-
+def is_strictly_legal_content(content):
+    return True
 
 
 def subs_eq(got, expected, any_order=False):
