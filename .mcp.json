@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "spec-discovery": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "/Users/sakekasi/school/phd/projects/spec-discovery/spec-discovery-v2/packages/mcp/dist/index.js"
+      ],
+      "env": {}
+    }
+  }
+}
