@@ -1,2 +1,6 @@
 .spec-discovery/
 .claude/
+.venv/
+.hypothesis/
+**/__pycache__/
+**/*.egg-info/
