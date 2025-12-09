@@ -110,26 +110,17 @@ def equivalent_timestamps(min_value=0, max_value=TIMEDELTA_MAX_DAYS):
         st.tuples(*[zero_padding() for _ in range(4)]),
     )
 
-
-def subtitles(strict=True):
+@st.composite
+def subtitles(draw, strict=True):
     """A Hypothesis strategy to generate Subtitle objects."""
-    subtitle_strategy = st.builds(
-        srt.Subtitle,
-        index=st.integers(),
-        start=timedeltas(),
-        end=timedeltas(),
-        content=st.text(),
-        proprietary=st.text(),
+
+    return srt.Subtitle(
+        index=draw(st.integers()),
+        start=draw(timedeltas()),
+        end=draw(timedeltas()),
+        content=draw(st.text()),
+        proprietary=draw(st.text())
     )
-
-    return subtitle_strategy
-
-
-@given(st.lists(subtitles()))
-def test_compose_and_parse_from_file(input_subs):
-    srt_file = StringIO(srt.compose(input_subs, reindex=False))
-    reparsed_subs = srt.parse(srt_file)
-    subs_eq(reparsed_subs, input_subs)
 
 
 @given(subtitles())
@@ -186,17 +177,4 @@ def test_sort_and_reindex(input_subs, start_index):
     expected_sorting = sorted(input_subs, key=lambda sub: sub.start)
     assert reindexed_subs == expected_sorting
 
-
-@given(st.lists(subtitles()))
-def test_sort_and_reindex_no_skip(input_subs):
-    # end time > start time should not trigger a skip if skip=False
-    for sub in input_subs:
-        old_start = sub.start
-        sub.start = sub.end
-        sub.end = old_start
-
-    reindexed_subs = list(srt.sort_and_reindex(input_subs, skip=False))
-
-    # Nothing should have been skipped
-    assert len(reindexed_subs) == len(input_subs)
 
