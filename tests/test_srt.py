@@ -115,6 +115,11 @@ def subtitles(strict=True):
     """A Hypothesis strategy to generate Subtitle objects."""
     subtitle_strategy = st.builds(
         srt.Subtitle,
+        index=st.integers(),
+        start=timedeltas(),
+        end=timedeltas(),
+        content=st.text(),
+        proprietary=st.text(),
     )
 
     return subtitle_strategy
