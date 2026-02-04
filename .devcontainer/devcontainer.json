@@ -1,0 +1,83 @@
+{
+  "name": "SRT Subtitle Library Dev Container",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "PYTHON_VERSION": "3.11",
+      "NODE_VERSION": "22",
+      "CLAUDE_VERSION": "latest"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // Python development
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter",
+        "ms-python.pylint",
+        "ms-python.debugpy",
+
+        // Testing
+        "littlefoxteam.vscode-python-test-adapter",
+        "hbenl.vscode-test-explorer",
+
+        // Claude Code
+        "anthropic.claude-code",
+
+        // General productivity
+        "eamodio.gitlens",
+        "editorconfig.editorconfig",
+        "christian-kohler.path-intellisense"
+      ],
+
+      "settings": {
+        // Python configuration
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.terminal.activateEnvironment": true,
+        "python.testing.pytestEnabled": true,
+        "python.testing.pytestArgs": ["tests"],
+        "python.testing.unittestEnabled": false,
+
+        // Formatting
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.black-formatter",
+          "editor.formatOnSave": true,
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+          }
+        },
+
+        // Linting
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": true,
+        "python.linting.pylintArgs": [
+          "--disable=C0330,R0913,R0205,R1725,C0209"
+        ],
+
+        // Type checking
+        "python.analysis.typeCheckingMode": "basic",
+
+        // Terminal
+        "terminal.integrated.defaultProfile.linux": "bash",
+
+        // Editor
+        "editor.rulers": [88],
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true
+      }
+    }
+  },
+
+  "forwardPorts": [],
+
+  "postCreateCommand": "bash .devcontainer/postCreateCommand.sh",
+
+  "remoteUser": "vscode",
+
+  "mounts": [
+    "source=claude-config,target=/home/vscode/.claude,type=volume",
+    "source=bash-history,target=/home/vscode/.bash_history_persist,type=volume"
+  ]
+}
