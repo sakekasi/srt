@@ -28,12 +28,15 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
-# Install Claude Code CLI
+# Install Claude Code CLI (must run as root for global install)
 ARG CLAUDE_VERSION=latest
 RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_VERSION}
 
 # Switch to non-root user
 USER $USERNAME
+
+RUN mkdir -p ~/.claude && echo '{"apiKeyHelper": "echo $ANTHROPIC_API_KEY"}' > ~/.claude/settings.json
+
 WORKDIR /workspace
 
 # Set Python to unbuffered mode for better logging
