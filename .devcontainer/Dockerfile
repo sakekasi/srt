@@ -35,8 +35,6 @@ RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_VERSION}
 # Switch to non-root user
 USER $USERNAME
 
-RUN mkdir -p ~/.claude && echo '{"apiKeyHelper": "echo $ANTHROPIC_API_KEY"}' > ~/.claude/settings.json
-
 WORKDIR /workspace
 
 # Set Python to unbuffered mode for better logging

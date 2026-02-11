@@ -33,6 +33,8 @@
       ],
 
       "settings": {
+        "vscode.enable-proposed-api": ["sakekasi.extension"],
+
         // Python configuration
         "python.defaultInterpreterPath": "/usr/local/bin/python",
         "python.terminal.activateEnvironment": true,
